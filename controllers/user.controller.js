@@ -27,7 +27,7 @@ module.exports.saveUser = (req, res, next) => {
         user.id = lastId + 1;
         parsedUsers.push(user);
         fs.writeFileSync(usersDir, JSON.stringify(parsedUsers))
-        res.send(user)
+        res.send({ message: "User Inserted Successfully" })
     } else res.send('Please Provide All the required data!')
 }
 module.exports.updateUser = (req, res, next) => {
