@@ -42,7 +42,20 @@ module.exports.updateUser = (req, res, next) => {
     } else res.send('Wrong User ID, Provide a valid User ID')
 }
 module.exports.bulkUpdateUser = (req, res, next) => {
-    res.send('Bulk Update User')
+    const bulkUser = req.body;
+    let users = fs.readFileSync(usersDir);
+    let parsedUsers = JSON.parse(users);
+    let s = 0;
+    let f = 0;
+    for (const user of bulkUser) {
+        const userIndex = parsedUsers.findIndex((pUser => pUser.id == user.id));
+        if (userIndex !== -1) {
+            Object.assign(parsedUsers[userIndex], user);
+            fs.writeFileSync(usersDir, JSON.stringify(parsedUsers))
+            s++;
+        } else f++;
+    }
+    res.send({ Success: s, Failed: f })
 }
 module.exports.deleteUser = (req, res, next) => {
     let users = fs.readFileSync(usersDir);
