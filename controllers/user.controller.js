@@ -13,7 +13,10 @@ module.exports.getAllUser = (req, res, next) => {
     } else res.send(parsedUsers);
 }
 module.exports.getRandomUser = (req, res, next) => {
-    res.send('Get a Random User')
+    let users = fs.readFileSync(usersDir);
+    let parsedUsers = JSON.parse(users);
+    const random = Math.floor(Math.random() * parsedUsers.length);
+    res.send(parsedUsers[random])
 }
 module.exports.saveUser = (req, res, next) => {
     let users = fs.readFileSync(usersDir);
