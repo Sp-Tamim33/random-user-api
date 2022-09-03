@@ -31,7 +31,15 @@ module.exports.saveUser = (req, res, next) => {
     } else res.send('Please Provide All the required data!')
 }
 module.exports.updateUser = (req, res, next) => {
-    res.send('update User')
+    const user = req.body;
+    let users = fs.readFileSync(usersDir);
+    let parsedUsers = JSON.parse(users);
+    const userIndex = parsedUsers.findIndex((pUser => pUser.id == user.id));
+    if (userIndex !== -1) {
+        Object.assign(parsedUsers[userIndex], user);
+        fs.writeFileSync(usersDir, JSON.stringify(parsedUsers))
+        res.send(parsedUsers[userIndex]);
+    } else res.send('Wrong User ID, Provide a valid User ID')
 }
 module.exports.bulkUpdateUser = (req, res, next) => {
     res.send('Bulk Update User')
