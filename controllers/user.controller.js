@@ -45,5 +45,14 @@ module.exports.bulkUpdateUser = (req, res, next) => {
     res.send('Bulk Update User')
 }
 module.exports.deleteUser = (req, res, next) => {
-    res.send('Delete User')
+    let users = fs.readFileSync(usersDir);
+    let parsedUsers = JSON.parse(users);
+    const { id } = req.body;
+    if (id) {
+        const remainingUsers = parsedUsers.filter(user => user.id !== id);
+        fs.writeFileSync(usersDir, JSON.stringify(remainingUsers))
+        res.send({ success: "Deleted" })
+    } else {
+        res.send('Wrong User ID, Provide a valid User ID')
+    }
 }
